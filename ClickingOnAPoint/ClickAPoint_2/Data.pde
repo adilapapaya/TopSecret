@@ -93,8 +93,17 @@ public class Geometry{
   public boolean isOver(float mx, float my){
     return mx>=x && mx<x+w && my>=y && my<y+h; 
   }
-  public Geometry draw(float mx, float my){
+  /** Boring draw when we know the mouse isn't over that rectangle*/
+  public Geometry draw(){
     noFill();
+    stroke(0xffaaaaaa); strokeWeight(.5);
+    rect(x,y,w,h);
+    for(Data d: dataPoints){
+       d.draw();  
+    }
+    return this;
+  }
+  public Geometry draw(float mx, float my){
     if(isOver(mx,my)){
        for(Data d: dataPoints){
          d.draw(mx,my);  
@@ -102,13 +111,7 @@ public class Geometry{
       stroke(colorForeground); strokeWeight(3);  noFill();
       rect(x,y,w,h);
     }
-    else{
-      stroke(0xffaaaaaa); strokeWeight(.5);
-      rect(x,y,w,h);
-      for(Data d: dataPoints){
-         d.draw();  
-      }
-    }
+    else draw();
     return this;
   }
 }
