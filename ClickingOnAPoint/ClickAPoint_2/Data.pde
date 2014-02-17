@@ -1,6 +1,6 @@
  
 /** Class for storing each data point */
-class Data{
+class Data implements Comparable<Data>{
  int id;
  PVector value; // for storing the x and y values
  PVector mapped; // for storing the mapped x and y values;
@@ -24,6 +24,7 @@ class Data{
     this.mapped = new PVector(xmapped, ymapped);
   } 
   public int id(){ return id; }
+  public Data id(int id){ this.id = id; return this; }
   public float x(){ return value.x; }
   public float y(){ return value.y; }
   public float xmapped(){ return mapped.x; }
@@ -33,6 +34,8 @@ class Data{
     return isOver = dist(xmapped(),ymapped(),mx,my)<r;
   } 
   public boolean isOver(){ return isOver; }
+  
+  //--------------------------------------------
   public int compareTo(Data other){
    return value.x > other.x() ? 1 : value.x < other.x() ? -1 : 
           value.y > other.y() ? 1 : value.y < other.y() ? -1 : 0;
@@ -60,6 +63,8 @@ class Data{
     ellipse(mapped.x,mapped.y,r,r);
     return this;
   }
+  
+  //--------------------
 }
 /**Class for storing the minimum and maximum */
 public class Extrema{
