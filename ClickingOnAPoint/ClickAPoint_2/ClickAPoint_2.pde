@@ -11,7 +11,7 @@ int lGrey = 0xffaaaaaa;
 
 Data[] d;
 Curve[] curves;
-int numPoints = 5000;
+int numPoints = 10000, curveArraySize = 100;
 
 // to help with the mouseover. 
 // This is an array of length rows*cols where cell 0: [row 0, col 0], cell 1: [row 0, col 1], cell cols: [row 1, col 0], etc.
@@ -32,16 +32,16 @@ void setup(){
     }
   }
   d = new Data[numPoints];
-  curves = new Curve[100];
+  curves = new Curve[curveArraySize];
   for(int i=0; i<numPoints; i++){
-   d[i] = new Data(i, geom,new PVector(random(i), random(1) ), new Extrema(0,numPoints), new Extrema(0,1));
+   d[i] = new Data(i, geom,new PVector(random(1), random(1) ), new Extrema(0,1), new Extrema(0,1));
    if(i<curves.length) curves[i] = new Curve(this);
     
   }
   Arrays.sort(d, new DataComparator());
   for(int i=0; i<numPoints; i++){
      d[i].id(i);
-     curves[i%100].add( d[i] );
+     curves[i%curveArraySize].add( d[i] );
      int r = d[i].getRow(rHeight);
      int c = d[i].getColumn(rWidth);
      rectangles[ cols * r + c ].addDataPoint(d[i]);
@@ -63,11 +63,11 @@ void drawPoints(PApplet p){
      rectangles[r*cols + c].draw();
     }
   }
-  if(mRow>-1 && mCol > -1){
+  if(mRow>-1 && mRow < rows && mCol > -1 && mCol < cols){
     rectangles[mRow * cols + mCol].draw(mouseX,mouseY);
     int activeElementId = rectangles[mRow * cols + mCol].getMouseoverPointId();
     if(activeElementId>-1){
-      curves[activeElementId%100].draw();
+      curves[activeElementId%curveArraySize].draw();
     }
     p.noStroke();
   }
