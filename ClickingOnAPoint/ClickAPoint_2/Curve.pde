@@ -1,17 +1,17 @@
 /**Each Curve consists of 'N' datapoints. */
 class Curve{
-  ArrayList<Data> data;
+  ArrayList<DataPoint> data;
   PApplet p;
   public Curve(PApplet parent){
     this.p = parent; 
-    data = new ArrayList<Data>();
+    data = new ArrayList<DataPoint>();
   }
-  public Curve add(Data d){ data.add(d); return this; }
-  public Data get(int idx){ return idx>-1 && idx<data.size() ? data.get(idx) : null; }
+  public Curve add(DataPoint d){ data.add(d); return this; }
+  public DataPoint get(int idx){ return idx>-1 && idx<data.size() ? data.get(idx) : null; }
   public Curve draw(){
     p.beginShape();  
     p.noStroke(); p.fill(colorForeground);
-    for(Data d : data){
+    for(DataPoint d : data){
       p.vertex(d.xmapped(),d.ymapped());
       p.ellipse(d.xmapped(),d.ymapped(),6,6);
     }

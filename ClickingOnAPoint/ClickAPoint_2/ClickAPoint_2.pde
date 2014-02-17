@@ -9,7 +9,7 @@ color steelblue = 0xff4682b4, lightsteelblue = 0xff0fc4de;
 int colorActive = 0xff003652, colorForeground = 0xff00698c, colorBackground = 0xff6a6a6a, whiteCol = 0xffffffff;
 int lGrey = 0xffaaaaaa;
 
-Data[] d;
+DataPoint[] d;
 Curve[] curves;
 int numPoints = 10000, curveArraySize = 100;
 
@@ -31,14 +31,14 @@ void setup(){
       rectangles[r*cols + c] = new Geometry(geom.x() + c*rWidth,geom.y() + r*rHeight,rWidth,rHeight);
     }
   }
-  d = new Data[numPoints];
+  d = new DataPoint[numPoints];
   curves = new Curve[curveArraySize];
   for(int i=0; i<numPoints; i++){
-   d[i] = new Data(i, geom,new PVector(random(1), random(1) ), new Extrema(0,1), new Extrema(0,1));
+   d[i] = new DataPoint(i, geom,new PVector(random(1), random(1) ), new Extrema(0,1), new Extrema(0,1));
    if(i<curves.length) curves[i] = new Curve(this);
     
   }
-  Arrays.sort(d, new DataComparator());
+  Arrays.sort(d, new DataPointComparator());
   for(int i=0; i<numPoints; i++){
      d[i].id(i);
      curves[i%curveArraySize].add( d[i] );

@@ -1,6 +1,5 @@
- 
 /** Class for storing each data point */
-class Data implements Comparable<Data>{
+class DataPoint implements Comparable<DataPoint>{
  int id;
  PVector value; // for storing the x and y values
  PVector mapped; // for storing the mapped x and y values;
@@ -13,7 +12,7 @@ class Data implements Comparable<Data>{
  boolean isOver = false;
  
  float r = 4; //radius around which to search
-  public Data(int id, Geometry geom, PVector value, Extrema xExtrema, Extrema yExtrema){
+  public DataPoint(int id, Geometry geom, PVector value, Extrema xExtrema, Extrema yExtrema){
     this.id = id;
     this.geom = geom;
     this.value = value;
@@ -24,7 +23,7 @@ class Data implements Comparable<Data>{
     this.mapped = new PVector(xmapped, ymapped);
   } 
   public int id(){ return id; }
-  public Data id(int id){ this.id = id; return this; }
+  public DataPoint id(int id){ this.id = id; return this; }
   public float x(){ return value.x; }
   public float y(){ return value.y; }
   public float xmapped(){ return mapped.x; }
@@ -36,7 +35,7 @@ class Data implements Comparable<Data>{
   public boolean isOver(){ return isOver; }
   
   //--------------------------------------------
-  public int compareTo(Data other){
+  public int compareTo(DataPoint other){
    return value.x > other.x() ? 1 : value.x < other.x() ? -1 : 
           value.y > other.y() ? 1 : value.y < other.y() ? -1 : 0;
   } 
@@ -47,7 +46,7 @@ class Data implements Comparable<Data>{
   public int getColumn(int columnWidth){
     return floor((mapped.x - geom.x())/ columnWidth);
   }
-  public Data draw(float mx, float my){
+  public DataPoint draw(float mx, float my){
     noStroke(); 
     //println("mouse positions = "+mx+","+my+", mapped coordinates = "+mapped.x+","+mapped.y);
     if(isOver(mx,my)){
@@ -58,7 +57,7 @@ class Data implements Comparable<Data>{
     else draw();
     return this;
   }
-  public Data draw(){
+  public DataPoint draw(){
     fill(0xffaaaaaa); noStroke();
     ellipse(mapped.x,mapped.y,r,r);
     return this;
@@ -77,7 +76,7 @@ public class Extrema{
 }
 /**class for storing the left, top, width, and height in a single entity. */
 public class Geometry{
-  ArrayList<Data> dataPoints = new ArrayList<Data>();
+  ArrayList<DataPoint> dataPoints = new ArrayList<DataPoint>();
   
   int x, y, w, h;
   public Geometry(int left, int top, int width, int height){
@@ -93,7 +92,7 @@ public class Geometry{
   /**bottom*/
   public int yb(){ return y+h; }
   
-  public Geometry addDataPoint(Data data){
+  public Geometry addDataPoint(DataPoint data){
     dataPoints.add(data);
     return this;
   }
@@ -109,7 +108,7 @@ public class Geometry{
     noFill();
     stroke(0xffaaaaaa); strokeWeight(.5);
     rect(x,y,w,h);
-    for(Data d: dataPoints){
+    for(DataPoint d: dataPoints){
        d.draw();  
     }
     return this;
@@ -118,7 +117,7 @@ public class Geometry{
   public Geometry draw(float mx, float my){
     activeElementId = -1;
     if(isOver(mx,my)){
-       for(Data d: dataPoints){
+       for(DataPoint d: dataPoints){
          d.draw(mx,my); 
          if(d.isOver()) activeElementId = d.id(); 
       }
