@@ -1,6 +1,7 @@
  
 /** Class for storing each data point */
 class Data{
+ int id;
  PVector value; // for storing the x and y values
  PVector mapped; // for storing the mapped x and y values;
  Geometry geom;
@@ -8,9 +9,12 @@ class Data{
  Extrema yEx; // ymin and ymax
  
  int col, row; // row and column, relative to a specified grid.
- //Rectangle rect; //plot geometry. used in the mapping
+ 
+ boolean isOver = false;
+ 
  float r = 4; //radius around which to search
-  public Data(Geometry geom, PVector value, Extrema xExtrema, Extrema yExtrema){
+  public Data(int id, Geometry geom, PVector value, Extrema xExtrema, Extrema yExtrema){
+    this.id = id;
     this.geom = geom;
     this.value = value;
     this.xEx = xExtrema;
@@ -19,14 +23,16 @@ class Data{
           ymapped = map(value.y,yEx.min(),yEx.max(),geom.yb(),geom.y());
     this.mapped = new PVector(xmapped, ymapped);
   } 
+  public int id(){ return id; }
   public float x(){ return value.x; }
   public float y(){ return value.y; }
   public float xmapped(){ return mapped.x; }
   public float ymapped(){ return mapped.y; }
   /** check if mx, my overlaps with xmapped, ymapped */
   public boolean isOver(float mx, float my){
-    return dist(xmapped(),ymapped(),mx,my)<r;
+    return isOver = dist(xmapped(),ymapped(),mx,my)<r;
   } 
+  public boolean isOver(){ return isOver; }
   public int compareTo(Data other){
    return value.x > other.x() ? 1 : value.x < other.x() ? -1 : 
           value.y > other.y() ? 1 : value.y < other.y() ? -1 : 0;
@@ -103,10 +109,13 @@ public class Geometry{
     }
     return this;
   }
+  int activeElementId = -1;
   public Geometry draw(float mx, float my){
+    activeElementId = -1;
     if(isOver(mx,my)){
        for(Data d: dataPoints){
-         d.draw(mx,my);  
+         d.draw(mx,my); 
+         if(d.isOver()) activeElementId = d.id(); 
       }
       stroke(colorForeground); strokeWeight(3);  noFill();
       rect(x,y,w,h);
@@ -114,4 +123,5 @@ public class Geometry{
     else draw();
     return this;
   }
+  public int getMouseoverPointId(){ return activeElementId; }
 }
