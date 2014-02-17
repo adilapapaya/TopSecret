@@ -10,7 +10,7 @@ int colorActive = 0xff003652, colorForeground = 0xff00698c, colorBackground = 0x
 int lGrey = 0xffaaaaaa;
 
 Data[] d;
-Data[][] dGroups;
+Curve[] curves;
 int numPoints = 5000;
 
 // to help with the mouseover. 
@@ -32,15 +32,16 @@ void setup(){
     }
   }
   d = new Data[numPoints];
-  dGroups = new Data[100][numPoints/100];
+  curves = new Curve[100];
   for(int i=0; i<numPoints; i++){
    d[i] = new Data(i, geom,new PVector(random(i), random(1) ), new Extrema(0,numPoints), new Extrema(0,1));
+   if(i<curves.length) curves[i] = new Curve(this);
     
   }
   Arrays.sort(d, new DataComparator());
   for(int i=0; i<numPoints; i++){
      d[i].id(i);
-     dGroups[i%100][i/100] = d[i];
+     curves[i%100].add( d[i] );
      int r = d[i].getRow(rHeight);
      int c = d[i].getColumn(rWidth);
      rectangles[ cols * r + c ].addDataPoint(d[i]);
@@ -66,12 +67,7 @@ void drawPoints(PApplet p){
     rectangles[mRow * cols + mCol].draw(mouseX,mouseY);
     int activeElementId = rectangles[mRow * cols + mCol].getMouseoverPointId();
     if(activeElementId>-1){
-      Data[] group = dGroups[activeElementId%100];
-      p.beginShape(); p.stroke(colorForeground); p.strokeWeight(1);
-      for(Data d:group){
-        p.vertex(d.xmapped(),d.ymapped());
-      }
-      p.endShape();
+      curves[activeElementId%100].draw();
     }
     p.noStroke();
   }
