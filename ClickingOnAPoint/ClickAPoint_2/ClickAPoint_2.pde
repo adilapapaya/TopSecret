@@ -15,18 +15,22 @@ int numPoints = 50000;
 Geometry[] rectangles;  
 int cols, rows; // number of rectangles in x and y
 int rWidth = 50, rHeight = 50;
+
+Geometry geom = new Geometry(50,80,1000,600);
 void setup(){
   size(1400,800);
   
-  cols = ceil((float)width/rWidth); rows = ceil((float)height/rHeight);
+  
+   
+  cols = ceil((float)geom.w()/rWidth); rows = ceil((float)geom.h()/rHeight);
   rectangles = new Geometry[rows*cols];
   for(int r=0; r<rows; r++){ 
     for(int c=0; c<cols; c++){
-      rectangles[r*cols + c] = new Geometry(c*rWidth,r*rHeight,rWidth,rHeight);
+      rectangles[r*cols + c] = new Geometry(geom.x() + c*rWidth,geom.y() + r*rHeight,rWidth,rHeight);
     }
   }
   d = new Data[numPoints];
-  Geometry geom = new Geometry(0,0,width,height);
+  
   for(int i=0; i<numPoints; i++){
    d[i] = new Data(geom,new PVector( random(1),random(1) ), new Extrema(0,1), new Extrema(0,1));
    int r = d[i].getRow(rHeight);
@@ -43,11 +47,13 @@ void drawPoints(PApplet p){
   p.fill(0); p.noStroke();
   int eSize = 3;
   boolean noneFoundYet = true; 
-  int mCol = floor(mouseX / rWidth ), mRow = floor(mouseY / rHeight);
+  int mCol = floor((mouseX -geom.x())/ rWidth ), mRow = floor((mouseY-geom.y()) / rHeight);
   for(int r=0; r<rows; r++){
     for(int c=0; c<cols; c++){
-     rectangles[r*cols + c].draw(mouseX,mouseY);
+     rectangles[r*cols + c].draw();
     }
   }
-  rectangles[mRow * cols + mCol].draw(mouseX,mouseY);
+  if(mRow>-1 && mCol > -1){
+    rectangles[mRow * cols + mCol].draw(mouseX,mouseY);
+  }
 }
