@@ -58,7 +58,8 @@ class DataPoint implements Comparable<DataPoint>{
     return this;
   }
   public DataPoint draw(){
-    fill(0xffaaaaaa); noStroke();
+    int red = floor(value.x*255), blue = floor(value.y*255);
+    fill(color(0,red,blue)); noStroke();
     ellipse(mapped.x,mapped.y,r,r);
     return this;
   }

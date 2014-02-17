@@ -10,12 +10,12 @@ class Curve{
   public DataPoint get(int idx){ return idx>-1 && idx<data.size() ? data.get(idx) : null; }
   public Curve draw(){
     p.beginShape();  
-    p.noStroke(); p.fill(colorForeground);
+    p.noStroke(); p.fill(0);
     for(DataPoint d : data){
       p.vertex(d.xmapped(),d.ymapped());
       p.ellipse(d.xmapped(),d.ymapped(),6,6);
     }
-    p.noFill(); p.stroke(colorForeground); p.strokeWeight(1);
+    p.noFill(); p.stroke(0); p.strokeWeight(2);
     p.endShape();
     return this;
   }
