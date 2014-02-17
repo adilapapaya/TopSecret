@@ -1,5 +1,8 @@
 import java.awt.geom.*;
 import java.awt.Rectangle;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 color greenCol = color(50,200,50), darkGreen = 0xff003300, redCol=color(230,50,0), darkRed = 0xff660000; color blueCol = color(0, 80, 150);
 color steelblue = 0xff4682b4, lightsteelblue = 0xff0fc4de;
@@ -29,15 +32,20 @@ void setup(){
     }
   }
   d = new Data[numPoints];
-  dGroups = new Data[numPoints/10][10];
+  dGroups = new Data[100][numPoints/100];
   for(int i=0; i<numPoints; i++){
-   d[i] = new Data(i, geom,new PVector(random(i),random(1) ), new Extrema(0,numPoints+10), new Extrema(0,1));
-   dGroups[i/10][i%10] = d[i];
-   int r = d[i].getRow(rHeight);
-   int c = d[i].getColumn(rWidth);
-   rectangles[ cols * r + c ].addDataPoint(d[i]);
+   d[i] = new Data(i, geom,new PVector(random(i), random(1) ), new Extrema(0,numPoints), new Extrema(0,1));
+    
   }
- 
+  Arrays.sort(d, new DataComparator());
+  for(int i=0; i<numPoints; i++){
+     d[i].id(i);
+     dGroups[i%100][i/100] = d[i];
+     int r = d[i].getRow(rHeight);
+     int c = d[i].getColumn(rWidth);
+     rectangles[ cols * r + c ].addDataPoint(d[i]);
+  }
+   
 }
 
 void draw(){
@@ -58,8 +66,8 @@ void drawPoints(PApplet p){
     rectangles[mRow * cols + mCol].draw(mouseX,mouseY);
     int activeElementId = rectangles[mRow * cols + mCol].getMouseoverPointId();
     if(activeElementId>-1){
-      Data[] group = dGroups[activeElementId/10];
-      p.beginShape(); p.stroke(lGrey);
+      Data[] group = dGroups[activeElementId%100];
+      p.beginShape(); p.stroke(colorForeground); p.strokeWeight(1);
       for(Data d:group){
         p.vertex(d.xmapped(),d.ymapped());
       }
