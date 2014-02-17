@@ -96,11 +96,11 @@ public class Geometry{
   public Geometry draw(float mx, float my){
     noFill();
     if(isOver(mx,my)){
-      stroke(colorForeground); strokeWeight(3);  
-      rect(x,y,w,h);
-      for(Data d: dataPoints){
+       for(Data d: dataPoints){
          d.draw(mx,my);  
       }
+      stroke(colorForeground); strokeWeight(3);  noFill();
+      rect(x,y,w,h);
     }
     else{
       stroke(0xffaaaaaa); strokeWeight(.5);
